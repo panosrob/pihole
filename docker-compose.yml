@@ -1,0 +1,50 @@
+version: "3.5"
+
+services:
+    pihole:
+        container_name: pihole
+        image: pihole/pihole:latest
+        ports:
+            - "53:53/tcp"
+            - "53:53/udp"
+            - "67:67/udp"
+            - "80:80/tcp"
+            - "443:443/tcp"
+        environment:
+            TZ: 'Europe/Athens'
+            WEBPASSWORD: 'password'
+            DNS1: "172.20.0.3#5053"
+            DNS2: "172.20.0.3#5053"
+        volumes:
+            - './etc-pihole/:/etc/pihole/'
+            - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
+        dns:
+            - 127.0.0.1
+            - 1.1.1.1
+        restart: unless-stopped
+        networks:
+            pihole:
+                ipv4_address: 172.20.0.2
+
+    cloudflare:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        image: panosrob/cloudflared:latest
+        container_name: cloudflare
+        environment:
+            TUNNEL_DNS_ADDRESS: "0.0.0.0"
+            TUNNEL_DNS_PORT: 5053
+            TUNNEL_METRICS: "172.20.0.3:39383"
+            TUNNEL_DNS_UPSTREAM: "https://cloudflare-dns.com/dns-query"
+        ports:
+            - "39383:39383"
+        networks:
+            pihole:
+                ipv4_address: 172.20.0.3
+
+networks:
+    pihole:
+        ipam:
+            config:
+                - subnet: 172.20.0.0/24
