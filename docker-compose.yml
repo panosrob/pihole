@@ -22,6 +22,9 @@ services:
             - 127.0.0.1
             - 1.1.1.1
         restart: unless-stopped
+        labels:
+            - "diun.enable=true"
+            - "diun.include_tags=latest"
         networks:
             pihole:
                 ipv4_address: 172.20.0.2
@@ -36,6 +39,9 @@ services:
             TUNNEL_DNS_UPSTREAM: "https://cloudflare-dns.com/dns-query"
         ports:
             - "39383:39383"
+        labels:
+            - "diun.enable=true"
+            - "diun.include_tags=latest"
         networks:
             pihole:
                 ipv4_address: 172.20.0.3
