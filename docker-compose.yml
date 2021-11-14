@@ -27,10 +27,7 @@ services:
                 ipv4_address: 172.20.0.2
 
     cloudflare:
-        build:
-            context: .
-            dockerfile: Dockerfile
-        image: panosrob/cloudflared:latest
+        image: ghcr.io/panosrob/cloudflared:latest
         container_name: cloudflare
         environment:
             TUNNEL_DNS_ADDRESS: "0.0.0.0"
