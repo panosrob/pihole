@@ -4,12 +4,13 @@ services:
     pihole:
         container_name: pihole
         image: pihole/pihole:latest
+        hostname: pihole.local
         ports:
             - "53:53/tcp"
             - "53:53/udp"
             - "67:67/udp"
-            - "80:80/tcp"
-            - "443:443/tcp"
+            - "8181:80/tcp"
+            - "8183:443/tcp"
         environment:
             TZ: 'Europe/Athens'
             WEBPASSWORD: 'password'
@@ -25,9 +26,11 @@ services:
         labels:
             - "diun.enable=true"
             - "diun.include_tags=latest"
+            - "auto.update=true"
         networks:
             pihole:
                 ipv4_address: 172.20.0.2
+                ipv6_address: 2001:3984:3989::2
 
     cloudflare:
         image: ghcr.io/panosrob/cloudflared:latest
@@ -45,9 +48,12 @@ services:
         networks:
             pihole:
                 ipv4_address: 172.20.0.3
+                ipv6_address: 2001:3984:3989::3
 
 networks:
     pihole:
+        enable_ipv6: true
         ipam:
             config:
                 - subnet: 172.20.0.0/24
+                - subnet: 2001:3984:3989::/64
