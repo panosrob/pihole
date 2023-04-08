@@ -16,7 +16,7 @@ services:
             WEBPASSWORD: 'password'
             DNS1: "172.20.0.3#5053"
             DNS2: "172.20.0.3#5053"
-	    FTLCONF_RATE_LIMIT: "2000/60"
+            FTLCONF_RATE_LIMIT: "2000/60"
         volumes:
             - './etc-pihole/:/etc/pihole/'
             - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
