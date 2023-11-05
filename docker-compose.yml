@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3"
 
 services:
     pihole:
@@ -8,21 +8,20 @@ services:
         ports:
             - "53:53/tcp"
             - "53:53/udp"
-            - "67:67/udp"
             - "8181:80/tcp"
             - "8183:443/tcp"
         environment:
             TZ: 'Europe/Athens'
             WEBPASSWORD: 'password'
-            DNS1: "172.20.0.3#5053"
-            DNS2: "172.20.0.3#5053"
+            PIHOLE_DNS_: "172.20.0.3#5053"
+            REV_SERVER: "true"
+            REV_SERVER_TARGET: "192.168.0.1"
+            REV_SERVER_DOMAIN: "panosrob"
+            REV_SERVER_CIDR: "192.168.0.0/24"
             FTLCONF_RATE_LIMIT: "2000/60"
         volumes:
             - './etc-pihole/:/etc/pihole/'
             - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
-        dns:
-            - 127.0.0.1
-            - 1.1.1.1
         restart: unless-stopped
         labels:
             - "diun.enable=true"
